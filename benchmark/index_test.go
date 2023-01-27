@@ -14,6 +14,7 @@ func assertion(t *testing.T, assert any, result any) {
 func TestSlice(t *testing.T) {
 	benchmark.SliceCreation()
 	benchmark.SliceCopy()
+	benchmark.ArrayCreation()
 	benchmark.ArrayCopy()
 	assertion(t, true, true)
 }

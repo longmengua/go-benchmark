@@ -7,7 +7,14 @@ import (
 	"time"
 )
 
-func Print(
+func PrintWithColor(
+	color string,
+	str string,
+) {
+	fmt.Fprintf(os.Stdout, fmt.Sprintf("\033[%sm%s\033[0m\n", color, str))
+}
+
+func print(
 	color string,
 	level string,
 	data interface{},
@@ -36,17 +43,17 @@ func Print(
 }
 
 func Debug(data interface{}, tags ...string) {
-	Print(Color.blue, Level.debug, data, nil, tags)
+	print(Color.Blue, Level.Debug, data, nil, tags)
 }
 
 func Info(data interface{}, tags ...string) {
-	Print(Color.green, Level.info, data, nil, tags)
+	print(Color.Green, Level.Info, data, nil, tags)
 }
 
 func Warn(data interface{}, tags ...string) {
-	Print(Color.yellow, Level.warn, data, nil, tags)
+	print(Color.Yellow, Level.Warn, data, nil, tags)
 }
 
 func Error(data interface{}, err error, tags ...string) {
-	Print(Color.red, Level.err, data, err, tags)
+	print(Color.Red, Level.Error, data, err, tags)
 }

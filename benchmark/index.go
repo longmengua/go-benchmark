@@ -10,9 +10,9 @@ import (
 
 func SliceCreation() {
 	slice := []string{"a1", "a2"}
-	log.Debug(fmt.Sprintf("1. slice cap is %d", cap(slice)))
+	log.Debug(fmt.Sprintf("slice cap is %d", cap(slice)))
 	slice = append(slice, "a3")
-	log.Debug(fmt.Sprintf("2. slice cap is %d", cap(slice)))
+	log.Debug(fmt.Sprintf("slice cap is %d", cap(slice)))
 }
 
 func SliceCopy() {
@@ -28,8 +28,27 @@ func SliceCopy() {
 	))
 }
 
+func ArrayCreation() {
+	array1 := [...]string{"a1", "a2"}
+	array2 := [3]string{}
+	array2[0] = array1[0]
+	array2[1] = array1[1]
+	log.PrintWithColor(
+		log.Color.Blue,
+		fmt.Sprintf(
+			"array1 cap is [%d], array2 cap is [%d], array1 value is %+q, array2 value is %+q",
+			cap(array1),
+			cap(array2),
+			array1,
+			array2,
+		),
+	)
+}
+
 func ArrayCopy() {
 	array1 := [...]string{"a1", "a2"}
+	// A copy of an array by value, arr := arr1
+	// A copy of an array by reference, arr := &arr1
 	array2 := array1
 	log.Debug(fmt.Sprintf(
 		"array1: [%p], array2: [%p], address is same: [%t], value is same [%t], (reflect) value is same [%t]",
