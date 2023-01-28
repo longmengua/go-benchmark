@@ -11,3 +11,7 @@ func (s *Set[T]) Push(n Node[T]) *Set[T] {
 	}
 	return s
 }
+
+func (s *Set[T]) Peek(n Node[T]) bool {
+	return s.Values[n.Hash()]
+}

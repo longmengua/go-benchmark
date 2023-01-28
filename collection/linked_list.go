@@ -1,16 +1,20 @@
 package collection
 
+import "fmt"
+
 type LinkedList[T interface{}] struct {
-	Len  int
-	Head *Node[T]
-	Tail *Node[T]
+	Len    int
+	Sorted bool
+	Head   *Node[T]
+	Tail   *Node[T]
 }
 
 func NewLinkedList[T interface{}](values ...T) *LinkedList[T] {
 	l := LinkedList[T]{
-		Len:  0,
-		Head: nil,
-		Tail: nil,
+		Len:    0,
+		Sorted: false,
+		Head:   nil,
+		Tail:   nil,
 	}
 	for _, value := range values {
 		l.Push(value)
@@ -36,7 +40,7 @@ func (l *LinkedList[T]) Push(value T) *LinkedList[T] {
 	return l
 }
 
-func (l *LinkedList[T]) Pop() *Node[T] {
+func (l *LinkedList[T]) Pop() T {
 	var n *Node[T]
 	if l.Len > 0 {
 		n = l.Tail
@@ -44,14 +48,16 @@ func (l *LinkedList[T]) Pop() *Node[T] {
 		l.Tail.Next = l.Head
 		l.Len--
 	}
-	return n
+	return n.Value
 }
 
-func (l *LinkedList[T]) IndexOf(node *Node[T]) int {
+func (l *LinkedList[T]) indexOf(value T) int {
 	if l.Len > 0 {
 		n := l.Head
 		for i := 0; i < l.Len; i++ {
-			if n == node {
+			v1 := fmt.Sprintf("%v", n.Value)
+			v2 := fmt.Sprintf("%v", value)
+			if v1 == v2 {
 				return i
 			}
 			n = l.Head.Next
@@ -60,8 +66,12 @@ func (l *LinkedList[T]) IndexOf(node *Node[T]) int {
 	return -1
 }
 
-func (l *LinkedList[T]) Contains(node *Node[T]) bool {
-	return l.IndexOf(node) > -1
+func (l *LinkedList[T]) IndexOf(value T) int {
+	return l.indexOf(value)
+}
+
+func (l *LinkedList[T]) Contains(value T) bool {
+	return l.indexOf(value) > -1
 }
 
 func (l *LinkedList[T]) Value() []T {
