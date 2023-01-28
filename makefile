@@ -4,7 +4,7 @@ run:
 
 # test
 test:
-	go test -v ./... -bench=. -run=none -benchmem .
+	go test -v ./... -bench=. -benchmem .
 	
 # show help
 help:
