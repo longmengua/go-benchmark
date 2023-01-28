@@ -3,67 +3,110 @@ package collection
 import "fmt"
 
 type LinkedList[T interface{}] struct {
-	Len    int
-	Sorted bool
-	Head   *Node[T]
-	Tail   *Node[T]
+	len      int
+	isSorted bool
+	first    *Node[T]
+	last     *Node[T]
 }
 
 func NewLinkedList[T interface{}](values ...T) *LinkedList[T] {
 	l := LinkedList[T]{
-		Len:    0,
-		Sorted: false,
-		Head:   nil,
-		Tail:   nil,
+		len:      0,
+		isSorted: false,
+		first:    nil,
+		last:     nil,
 	}
 	for _, value := range values {
-		l.Push(value)
+		l.push(value)
 	}
 	return &l
 }
 
-func (l *LinkedList[T]) Push(value T) *LinkedList[T] {
+func (l *LinkedList[T]) push(value T) *LinkedList[T] {
 	n := Node[T]{
-		Value:    value,
-		Previous: nil,
-		Next:     nil,
+		value:    value,
+		previous: nil,
+		next:     nil,
 	}
-	if l.Len == 0 {
-		l.Head = &n
-		l.Tail = &n
+	if l.len == 0 {
+		l.first = &n
+		l.last = &n
 	} else {
-		l.Tail.Next = &n
-		l.Tail = &n
-		n.Next = l.Head
+		l.last.next = &n
+		n.previous = l.last
+		l.last = &n
+		n.next = l.first
 	}
-	l.Len++
+	l.len++
+	return l
+}
+
+func (l *LinkedList[T]) indexOf(value T) int {
+	if l.len > 0 {
+		n := l.first
+		for i := 0; i < l.len; i++ {
+			v1 := fmt.Sprintf("%v", n.value)
+			v2 := fmt.Sprintf("%v", value)
+			if v1 == v2 {
+				return i
+			}
+			n = n.next
+		}
+	}
+	return -1
+}
+
+func (l *LinkedList[T]) Len(values ...T) int {
+	return l.len
+}
+
+func (l *LinkedList[T]) First() T {
+	return l.first.value
+}
+
+func (l *LinkedList[T]) Last() T {
+	return l.last.value
+}
+
+func (l *LinkedList[T]) Push(values ...T) *LinkedList[T] {
+	for _, v := range values {
+		l.push(v)
+	}
 	return l
 }
 
 func (l *LinkedList[T]) Pop() T {
 	var n *Node[T]
-	if l.Len > 0 {
-		n = l.Tail
-		l.Tail = l.Tail.Previous
-		l.Tail.Next = l.Head
-		l.Len--
+	if l.len > 0 {
+		n = l.last
+		l.last = l.last.previous
+		l.last.next = l.first
+		l.len--
 	}
-	return n.Value
+	return n.value
 }
 
-func (l *LinkedList[T]) indexOf(value T) int {
-	if l.Len > 0 {
-		n := l.Head
-		for i := 0; i < l.Len; i++ {
-			v1 := fmt.Sprintf("%v", n.Value)
-			v2 := fmt.Sprintf("%v", value)
-			if v1 == v2 {
-				return i
+func (l *LinkedList[T]) Get(index int) *T {
+	halfIndex := l.len / 2
+	var node *Node[T]
+	if index < halfIndex {
+		node = l.first
+		for i := 0; i < index; i++ {
+			if i == index {
+				return &node.value
 			}
-			n = l.Head.Next
+			node = node.next
 		}
 	}
-	return -1
+
+	node = l.last
+	for i := 0; i < index; i++ {
+		if i+1 == index {
+			return &node.value
+		}
+		node = node.previous
+	}
+	return nil
 }
 
 func (l *LinkedList[T]) IndexOf(value T) int {
@@ -74,12 +117,12 @@ func (l *LinkedList[T]) Contains(value T) bool {
 	return l.indexOf(value) > -1
 }
 
-func (l *LinkedList[T]) Value() []T {
-	values := make([]T, l.Len)
-	node := l.Head
-	for i := 0; node != l.Tail; i++ {
-		values[i] = node.Value
-		node = node.Next
+func (l *LinkedList[T]) Values() []T {
+	values := make([]T, l.len)
+	node := l.first
+	for i := 0; node != l.last; i++ {
+		values[i] = node.value
+		node = node.next
 	}
 	return values
 }

@@ -6,9 +6,13 @@ import (
 )
 
 type Node[T interface{}] struct {
-	Previous *Node[T]
-	Next     *Node[T]
-	Value    T
+	previous *Node[T]
+	next     *Node[T]
+	value    T
+}
+
+func (n *Node[T]) Value() T {
+	return n.value
 }
 
 func (n *Node[T]) Hash() []byte {

@@ -18,65 +18,93 @@ func assertion(t *testing.T, assert any, result any) {
 }
 
 func TestLinkedListCase1(t *testing.T) {
-	// case 1.
-	l := collection.NewLinkedList[string]()
-	assertion(t, 0, l.Len)
-	l.Push("1")
-	assertion(t, 1, l.Len)
+	L := collection.NewLinkedList[string]()
+	assertion(t, 0, L.Len)
+	L.Push("1")
+	assertion(t, 1, L.Len)
 }
 
 func TestLinkedListCase2(t *testing.T) {
-	// case 2.
-	l := collection.NewLinkedList("0")
-	assertion(t, 1, l.Len)
-	l.Push("1")
-	assertion(t, 2, l.Len)
-	i := l.IndexOf("1")
-	assertion(t, 1, i)
+	L := collection.NewLinkedList("0")
+	assertion(t, 1, L.Len)
+	L.Push("1")
+	assertion(t, 2, L.Len)
+	I := L.IndexOf("1")
+	assertion(t, 1, I)
 }
 
 func TestLinkedListCase3(t *testing.T) {
-	// case 3.
-	u1 := User{
+	U1 := User{
 		Name:   "U1",
 		Age:    20,
 		Gendar: "male",
 	}
-	u2 := User{
+	U2 := User{
 		Name:   "U2",
 		Age:    18,
 		Gendar: "female",
 	}
-	l1 := collection.NewLinkedList(u1)
-	assertion(t, 1, l1.Len)
-	l1.Push(u2)
-	assertion(t, 2, l1.Len)
-	i := l1.IndexOf(u2)
-	assertion(t, 1, i)
+	L := collection.NewLinkedList(U1)
+	assertion(t, 1, L.Len)
+	L.Push(U2)
+	assertion(t, 2, L.Len)
+	I := L.IndexOf(U2)
+	assertion(t, 1, I)
+}
+
+func TestLinkedListCase4(t *testing.T) {
+	U1 := User{
+		Name:   "U1",
+		Age:    20,
+		Gendar: "male",
+	}
+	U2 := User{
+		Name:   "U2",
+		Age:    18,
+		Gendar: "female",
+	}
+	U3 := User{
+		Name:   "U3",
+		Age:    22,
+		Gendar: "female",
+	}
+	U4 := User{
+		Name:   "U4",
+		Age:    24,
+		Gendar: "male",
+	}
+	L := collection.NewLinkedList(U1, U2)
+	assertion(t, 2, L.Len)
+	L.Push(U3, U4)
+	assertion(t, 4, L.Len)
+	I := L.IndexOf(U3)
+	assertion(t, 2, I)
+	GetU3 := L.Get(I)
+	assertion(t, U3, *GetU3)
 }
 
 func BenchmarkLinkedListCase1(b *testing.B) {
 	for i := 0; i < b.N; i++ {
-		u1 := User{
+		U1 := User{
 			Name:   "U1",
 			Age:    20,
 			Gendar: "male",
 		}
-		u2 := User{
+		U2 := User{
 			Name:   "U2",
 			Age:    18,
 			Gendar: "female",
 		}
-		l1 := collection.NewLinkedList(u1)
-		l1.Push(u2)
-		l1.IndexOf(u2)
+		L := collection.NewLinkedList(U1)
+		L.Push(U2)
+		L.IndexOf(U2)
 	}
 }
 
 func BenchmarkLinkedListCase2(b *testing.B) {
 	for i := 0; i < b.N; i++ {
-		l1 := collection.NewLinkedList("u1")
-		l1.Push("u2")
-		l1.IndexOf("u2")
+		L := collection.NewLinkedList("u1")
+		L.Push("u2")
+		L.IndexOf("u2")
 	}
 }
